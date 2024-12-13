@@ -1,0 +1,56 @@
+
+services:
+
+  app:
+    build:
+      context: .
+    ports:
+      - 80:80
+    environment:
+      SERVER_PORT: 80
+      DB_JPA_SHOW_SQL: false
+      DB_DDL_AUTO: update
+      DB_SERVER: database
+      DB_PORT: 5432
+      DB_DATABASE: order_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_SCHEMA: public
+      FLYWAY_ENABLED: true
+      RABBITMQ_USERNAME: user_queue
+      RABBITMQ_PASSWORD: user_queue
+      RABBITMQ_ADDRESSES: rabbitmq:5672
+      RABBITMQ_ORDER_CONSUMER: order_queue
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - order-api-net
+
+  database:
+    image: postgres:13
+    container_name: database
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - order-api-net
+
+  rabbitmq:
+    image: rabbitmq:4.0.2-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./docker/rabbitmq/rabbitmq_definitions.json:/etc/rabbitmq/definitions.json:ro
+    networks:
+      - order-api-net
+
+networks:
+  order-api-net:
+    name: order-api-net
