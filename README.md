@@ -52,6 +52,7 @@ O **Order API** possui validações para consumir os pedidos, caso o pedido não
 ### 3. **Projeto B**
 O Projeto B consome o serviço **Order API**. O **Order API** expõe um endpoint que permite buscar um pedido específico pelo seu ID.
 
+---
 
 ### Curls
 
@@ -76,3 +77,19 @@ curl --location 'http://localhost:15672/api/exchanges/%2F/amq.default/publish' \
            "payload_encoding": "string"
          }'
 ```
+---
+
+### Teste de latência
+
+ - Para fazer um teste de latência com uma grande carga de dados no banco de dados, foi necessário popular o banco:
+
+<img src="doc/consistencia_db/registros_db.png" width="629" height="265" />
+
+ - O resultado de algumas pesquisas foi:
+
+<img src="doc/consistencia_db/evidencia_1.png" width="1001" height="437" />
+---
+<img src="doc/consistencia_db/evidencia_2.png" width="1047" height="540" />
+---
+<img src="doc/consistencia_db/evidencia_3.png" width="969" height="318" />
+---

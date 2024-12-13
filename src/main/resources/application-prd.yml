@@ -39,8 +39,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: ${ACTUATOR_EXPOSURE:health,info,shutdown}
-    enabled-by-default: ${ACTUATOR_ENABLED:true}
+        include: ${ACTUATOR_EXPOSURE}
+    enabled-by-default: ${ACTUATOR_ENABLED}
   endpoint:
     info:
       enabled: true

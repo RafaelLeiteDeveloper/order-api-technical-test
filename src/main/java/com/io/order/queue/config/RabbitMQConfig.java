@@ -33,9 +33,4 @@ public class RabbitMQConfig {
                 .build();
     }
 
-    @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
-
 }
