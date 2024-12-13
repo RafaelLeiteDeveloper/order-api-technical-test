@@ -1,6 +1,7 @@
 package com.io.order.controller;
 
-import com.io.order.model.dto.OrderDto;
+import com.io.order.model.dto.request.OrderRequestDto;
+import com.io.order.model.dto.response.OrderResponseDto;
 import com.io.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDto> getOrderById(@PathVariable("id") String id){
+    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable("id") String id){
         Objects.requireNonNull(id, "O valor de `id` não pode ser nulo");
-        OrderDto orderDto = this.orderService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+        OrderResponseDto orderRequestDto = this.orderService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(orderRequestDto);
     }
 
 

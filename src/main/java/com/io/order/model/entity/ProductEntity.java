@@ -1,6 +1,6 @@
 package com.io.order.model.entity;
 
-import com.io.order.model.dto.ProductDto;
+import com.io.order.model.dto.request.ProductRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,11 +29,11 @@ public class ProductEntity {
     @Column(name = "db_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    public static ProductEntity toProductEntity(ProductDto productDto) {
+    public static ProductEntity toProductEntity(ProductRequestDto productRequestDto) {
         return ProductEntity.builder()
-                .productId(productDto.getProductId())
-                .name(productDto.getName())
-                .price(productDto.getPrice())
+                .productId(productRequestDto.getProductId())
+                .name(productRequestDto.getName())
+                .price(productRequestDto.getPrice())
                 .build();
     }
 

@@ -21,6 +21,8 @@ services:
       RABBITMQ_PASSWORD: user_queue
       RABBITMQ_ADDRESSES: rabbitmq:5672
       RABBITMQ_ORDER_CONSUMER: order_queue
+      ACTUATOR_EXPOSURE: health,info,shutdown
+      ACTUATOR_ENABLED: true
     depends_on:
       - database
       - rabbitmq

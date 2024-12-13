@@ -1,6 +1,6 @@
 package com.io.order.model.entity;
 
-import com.io.order.model.dto.OrderDto;
+import com.io.order.model.dto.request.OrderRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,12 +31,12 @@ public class OrderEntity {
     @Column(name = "bd_total_cost")
     private BigDecimal totalCost;
 
-    public static OrderEntity toOrderEntity(OrderDto orderDto) {
+    public static OrderEntity toOrderEntity(OrderRequestDto orderRequestDto) {
         return OrderEntity.builder()
-                .orderId(orderDto.getOrderId())
-                .clientId(orderDto.getClientId())
-                .date(orderDto.getOrderDate())
-                .totalCost(orderDto.getTotalPriceProducts())
+                .orderId(orderRequestDto.getOrderId())
+                .clientId(orderRequestDto.getClientId())
+                .date(orderRequestDto.getOrderDate())
+                .totalCost(orderRequestDto.getTotalPriceProducts())
                 .build();
     }
 }

@@ -51,3 +51,28 @@ O **Order API** possui validações para consumir os pedidos, caso o pedido não
 
 ### 3. **Projeto B**
 O Projeto B consome o serviço **Order API**. O **Order API** expõe um endpoint que permite buscar um pedido específico pelo seu ID.
+
+
+### Curls
+
+### 1- **Buscar pedido**
+
+```bash
+curl --location 'http://localhost:8080/v1/order/f28a67b5-66ff-4021-91c3-cce381fa39b5'
+```
+
+ - **Obs:** se a aplicação estiver no container, mude a porta pra: 80
+
+### 2 - **Cadastrar pedido na fila**
+
+```bash
+curl --location 'http://localhost:15672/api/exchanges/%2F/amq.default/publish' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+           "properties": {},
+           "routing_key": "order_queue",
+           "payload": "{\"order_id\": \"f28a67b5-66ff-4021-91c3-cce381fa39b8\", \"client_id\": \"789e0123-e89b-12d3-a456-426614174006\", \"products\": [{\"product_id\": \"011\", \"name\": \"Webcam\", \"price\": 45.99, \"quantity\": 1}], \"order_date\": \"2024-12-05\"}",
+           "payload_encoding": "string"
+         }'
+```

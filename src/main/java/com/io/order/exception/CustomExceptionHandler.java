@@ -26,7 +26,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Error> handleNullPointerException(NullPointerException e, HttpServletRequest s) {
         log.error("method=NullPointerException | message: {}", e.getMessage());
-        return Error.response(e.getMessage(), HttpStatus.NOT_FOUND, s.getRequestURI());
+        return Error.response(e.getMessage(), HttpStatus.BAD_REQUEST, s.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -31,3 +31,18 @@ spring:
       queues:
         consumers:
           order-queue: ${RABBITMQ_ORDER_CONSUMER}
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_EXPOSURE:health,info,shutdown}
+    enabled-by-default: ${ACTUATOR_ENABLED:true}
+  endpoint:
+    info:
+      enabled: true
+    health:
+      show-details: never

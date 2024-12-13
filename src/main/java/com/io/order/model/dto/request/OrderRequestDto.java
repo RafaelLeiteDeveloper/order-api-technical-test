@@ -1,9 +1,8 @@
-package com.io.order.model.dto;
+package com.io.order.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.io.order.model.internal.OrderInternal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class OrderRequestDto {
 
     @JsonProperty("order_id")
     private String orderId;
@@ -25,7 +24,7 @@ public class OrderDto {
     private String clientId;
 
     @JsonProperty("products")
-    private List<ProductDto> products;
+    private List<ProductRequestDto> products;
 
     @JsonProperty("order_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -34,17 +33,9 @@ public class OrderDto {
     @JsonIgnore
     public BigDecimal getTotalPriceProducts(){
         return products.stream()
-                .map(ProductDto::getPrice)
+                .map(ProductRequestDto::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public static OrderDto toOrderDto(OrderInternal orderDb, List<ProductDto> productDtoList){
-        return OrderDto.builder()
-                .orderId(orderDb.getOrderId())
-                .clientId(orderDb.getClientId())
-                .orderDate(orderDb.getOrderDate())
-                .products(productDtoList)
-                .build();
-    }
 
 }

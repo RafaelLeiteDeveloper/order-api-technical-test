@@ -1,4 +1,4 @@
-package com.io.order.model.dto;
+package com.io.order.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.io.order.model.internal.ProductInternal;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductRequestDto {
 
     @JsonProperty("product_id")
     private String productId;
@@ -28,8 +28,8 @@ public class ProductDto {
     @JsonProperty("quantity")
     private int quantity;
 
-    public static ProductDto toProductDto(ProductInternal internal){
-        return ProductDto.builder()
+    public static ProductRequestDto toProductDto(ProductInternal internal){
+        return ProductRequestDto.builder()
                 .name(internal.getName())
                 .price(internal.getPrice())
                 .productId(internal.getProductId())
@@ -37,9 +37,9 @@ public class ProductDto {
                 .build();
     }
 
-    public static List<ProductDto> toProductDtoList(List<ProductInternal> productInternalList){
+    public static List<ProductRequestDto> toProductDtoList(List<ProductInternal> productInternalList){
         return productInternalList.stream()
-                                  .map(ProductDto::toProductDto)
+                                  .map(ProductRequestDto::toProductDto)
                                   .collect(Collectors.toList());
     }
 }

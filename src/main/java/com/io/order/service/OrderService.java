@@ -1,7 +1,8 @@
 package com.io.order.service;
 
-import com.io.order.model.dto.OrderDto;
-import com.io.order.model.dto.ProductDto;
+import com.io.order.model.dto.request.OrderRequestDto;
+import com.io.order.model.dto.request.ProductRequestDto;
+import com.io.order.model.dto.response.OrderResponseDto;
 import com.io.order.model.entity.OrderEntity;
 import com.io.order.model.entity.OrderProductEntity;
 import com.io.order.model.entity.ProductEntity;
@@ -11,14 +12,13 @@ import com.io.order.repository.OrderProductRepository;
 import com.io.order.repository.OrderRepository;
 import com.io.order.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -28,22 +28,31 @@ public class OrderService {
     private final OrderProductRepository orderProductRepository;
 
     @Transactional
-    public void saveOrder(OrderDto orderDto) {
+    public void saveOrder(OrderRequestDto orderRequestDto) {
 
-        OrderEntity orderEntity = this.orderRepository.saveIfNotExists(OrderEntity.toOrderEntity(orderDto));
+        log.info("Starting the Save Order Process in Bank...");
+        OrderEntity orderEntity = this.orderRepository.saveIfNotExists(OrderEntity.toOrderEntity(orderRequestDto));
 
-        orderDto.getProducts().forEach( productDto -> {
+        orderRequestDto.getProducts().forEach(productDto -> {
+
+            log.info("starting the process of registering the products in the bank, if there is none...");
             ProductEntity productEntity = this.productRepository.findByIdOrElseSave(productDto);
+
+            log.info("starting the process of searching for a product in the bank if it exists, if it does not exist, populating...");
             OrderProductEntity orderProductEntity = OrderProductEntity.toOrderProductEntity(productDto.getQuantity(), orderEntity, productEntity);
             this.orderProductRepository.save(orderProductEntity);
         });
+
+        log.info("Order successfully saved in the bank.");
     }
 
-    public OrderDto findById(String id) {
+    public OrderResponseDto findById(String id) {
+        log.info("Starting the process of searching for an order in the bank by id...");
         OrderInternal orderDb = orderRepository.findOrderDetailsByOrderId(id).orElseThrow(() -> new NullPointerException("Pedido não encontrado com esse id."));
         List<ProductInternal> productInternalDtoList = orderRepository.findProductsByOrderId(id).orElseGet(Collections::emptyList);
-        List<ProductDto> productDtoList = ProductDto.toProductDtoList(productInternalDtoList);
-        return OrderDto.toOrderDto(orderDb, productDtoList);
+        List<ProductRequestDto> productRequestDtoList = ProductRequestDto.toProductDtoList(productInternalDtoList);
+        log.info("order and your products found, returning.");
+        return OrderResponseDto.toOrderDto(orderDb, productRequestDtoList);
     }
 
 }

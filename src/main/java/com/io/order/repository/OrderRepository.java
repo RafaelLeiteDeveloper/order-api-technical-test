@@ -28,7 +28,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String> {
 
     @Query(value = "SELECT o.pk_order_id AS orderId, " +
             "o.st_client_id AS clientId, " +
-            "o.dt_order_date AS orderDate " +
+            "o.dt_order_date AS orderDate, " +
+            "o.bd_total_cost  as totalCost " +
             "FROM tb_orders o " +
             "WHERE o.pk_order_id = :orderId", nativeQuery = true)
     Optional<OrderInternal> findOrderDetailsByOrderId(@Param("orderId") String orderId);

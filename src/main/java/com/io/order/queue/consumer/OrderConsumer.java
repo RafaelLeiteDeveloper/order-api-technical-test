@@ -1,7 +1,7 @@
 package com.io.order.queue.consumer;
 
 import lombok.extern.slf4j.Slf4j;
-import com.io.order.model.dto.OrderDto;
+import com.io.order.model.dto.request.OrderRequestDto;
 import com.io.order.service.OrderService;
 import com.rabbitmq.client.Channel;
 import jakarta.validation.Valid;
@@ -20,11 +20,11 @@ public class OrderConsumer {
 
     private final OrderService orderService;
 
-    @RabbitListener(queues = "${spring.rabbitmq.template.queues.consumers.order-queue}")
-    public void listenToProposalQueue(@Valid @Payload OrderDto orderDto, Channel channel, Message message) throws IOException {
+    @RabbitListener(queues = "${spring.rabbitmq.template.queues.consumers.order-queue}", concurrency = "5-10")
+    public void listenToProposalQueue(@Valid @Payload OrderRequestDto orderRequestDto, Channel channel, Message message) throws IOException {
         try {
-            log.info("Body with {} received: ", orderDto.getOrderId());
-            this.orderService.saveOrder(orderDto);
+            log.info("Body with {} received: ", orderRequestDto.getOrderId());
+            this.orderService.saveOrder(orderRequestDto);
         } catch (Exception e){
             log.error("Exception Type: {} | Message: {}", e.getClass().getSimpleName(), e.getMessage());
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
